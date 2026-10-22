@@ -1,0 +1,9 @@
+CLUB GOURMET MIRAMAR - Formulario de inscripción online
+
+1. Sube el archivo index.html a la web del hotel (o a un hosting gratis como Netlify Drop o GitHub Pages).
+2. Haz una solicitud de prueba. La primera vez, el servicio FormSubmit envía un correo de activación
+   a jefe.ventas.hmh@miramarhoteles.com: hay que abrirlo y pulsar "Activate Form". Desde ese momento
+   cada solicitud llega a ese correo como una tabla con todos los datos.
+3. Pon el enlace en el Linktree, en la bio de Instagram y en un QR para los puntos de venta.
+
+Para cambiar el correo de destino: edita la línea  const DESTINO = "..."  dentro de index.html.
