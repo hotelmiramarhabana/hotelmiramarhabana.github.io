@@ -11,15 +11,12 @@
 <style>
 /* Layout: dos columnas en escritorio. Izquierda fija: logo, invitación, tarjeta y privilegios. Derecha: la solicitud por secciones. En móvil, todo en una columna. */
 :root{
-  --ink:#0D2236; --ink-2:#22384D; --blue:#0E7BC2; --orange:#EF892B;
-  --bg:#FBFBF9; --panel:#F2F5F8; --surface:#FFFFFF; --fg:#18232E; --muted:#5F6E7C; --line:#DCE2E8; --line-soft:#E9EDF1;
-  --focus:#0E7BC2; --error:#A8322A;
+  --ink:#F2F4F6; --ink-2:#C9D0D7; --blue:#3FA2E6; --orange:#EF892B;
+  --bg:#000000; --panel:#0A0B0D; --surface:#111317; --fg:#E9ECEF; --muted:#8C949D; --line:#2A2E34; --line-soft:#16191D;
+  --focus:#3FA2E6; --error:#F08A80;
   --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
   --body:"Manrope", "Segoe UI", Arial, sans-serif;
-}
-@media (prefers-color-scheme: dark){
-  :root{ --ink:#E8EDF2; --ink-2:#C9D3DD; --blue:#4AA6E3; --bg:#0C131A; --panel:#111B24; --surface:#141F2A; --fg:#E3E8EE; --muted:#93A1AF; --line:#27333F; --line-soft:#1D2832; --focus:#4AA6E3; --error:#F0A39C; color-scheme:dark }
-  .logo{filter:brightness(0) invert(1) opacity(.92)}
+  color-scheme:dark;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -46,7 +43,7 @@ h1 em{font-style:italic;color:var(--blue)}
 .lead{margin:0;color:var(--muted);max-width:40ch;font-size:16.5px}
 
 .card{width:min(100%,330px);aspect-ratio:1.586;border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;color:#EEF3F8;
-  background:radial-gradient(120% 90% at 100% 0%,#1A3A58 0%,#0B1A29 62%);box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 24px 50px -18px rgba(9,25,41,.55);position:relative;overflow:hidden}
+  background:radial-gradient(120% 90% at 100% 0%,#1C3D5C 0%,#0B1622 62%);box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 30px 60px -20px rgba(14,123,194,.35);position:relative;overflow:hidden}
 .card::after{content:"";position:absolute;inset:auto 0 0 0;height:3px;background:linear-gradient(90deg,var(--blue) 0 80%,var(--orange) 80%)}
 .card .c-top{display:flex;justify-content:space-between;align-items:flex-start}
 .card .c-name{font:400 22px/1.05 var(--display);letter-spacing:.01em}
@@ -81,8 +78,8 @@ legend .opt{margin-left:auto;font:400 12.5px/1 var(--body);color:var(--muted);le
 label,.label{font:500 11.5px/1.4 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 input,select{width:100%;font:400 16px/1.4 var(--body);color:var(--fg);background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 0 9px;min-height:44px;transition:border-color .2s}
 select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 10px) 52%,calc(100% - 5px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:24px}
-select option{color:#18232E}
-input::placeholder{color:#A3AEB9}
+select option{color:#E9ECEF;background:#111317}
+input::placeholder{color:#5E666F}
 input:hover,select:hover{border-bottom-color:var(--ink-2)}
 input:focus,select:focus{outline:none;border-bottom:1.5px solid var(--focus);padding-bottom:8.5px}
 input:focus-visible,select:focus-visible{box-shadow:0 2px 0 0 var(--focus)}
@@ -399,12 +396,24 @@ form.addEventListener("submit", async (e) => {
   try{
     const res = await fetch("https://formsubmit.co/ajax/" + DESTINO, { method:"POST", headers:{ "Accept":"application/json" }, body:data });
     const json = await res.json().catch(() => ({}));
-    if (!res.ok || String(json.success) === "false") throw new Error(json.message || "error");
+    const msg = String(json.message || "");
+    // Primera vez: FormSubmit pide activar el formulario desde el correo de Ventas
+    if (/activat/i.test(msg)){
+      statusEl.className = "status error";
+      statusEl.textContent = lang === "en"
+        ? "This form is pending activation. The hotel has been notified; please try again later or write to " + DESTINO + "."
+        : "El formulario está pendiente de activación. Ya avisamos al hotel; inténtelo más tarde o escriba a " + DESTINO + ".";
+      console.warn("FormSubmit:", msg);
+      btn.disabled = false; btn.textContent = t("submit");
+      return;
+    }
+    if (!res.ok || String(json.success) === "false") throw new Error(msg || ("HTTP " + res.status));
     form.hidden = true; document.getElementById("form-head").hidden = true;
     document.getElementById("done-name").textContent = data.get("Nombre") + " " + data.get("Apellidos");
     const done = document.getElementById("done"); done.hidden = false; done.focus();
     done.scrollIntoView({ behavior:"smooth", block:"start" });
   }catch(err){
+    console.warn("Envío fallido:", err && err.message);
     statusEl.className = "status error";
     statusEl.textContent = t("errSend") + DESTINO + ".";
     btn.disabled = false; btn.textContent = t("submit");
