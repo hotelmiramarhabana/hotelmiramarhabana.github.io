@@ -87,6 +87,7 @@ input:focus-visible,select:focus-visible{box-shadow:0 2px 0 0 var(--focus)}
 .err{font-size:12.5px;color:var(--error)}
 .err:empty{display:none}
 .hint{font-size:12.5px;color:var(--muted)}
+.opt-l{text-transform:none;letter-spacing:0;font-weight:400}
 
 .segment{display:flex;flex-wrap:wrap;gap:10px}
 .segment label{text-transform:none;letter-spacing:0;font:400 14.5px/1 var(--body);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s}
@@ -172,7 +173,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
       </div>
 
       <ul class="perks">
-        <li><span class="k">10 %</span><span class="v"><strong data-i18n="p1t">En restaurantes y bares</strong><span data-i18n="p1d">Sobre el total de la consumición en restaurantes, bares y cafeterías del hotel.</span></span></li>
+        <li><span class="k">5 %</span><span class="v"><strong data-i18n="p1t">En restaurantes y bares</strong><span data-i18n="p1d">Sobre el total de la consumición en restaurantes, bares y cafeterías del hotel.</span></span></li>
         <li><span class="k" data-i18n="p2k">Piscina</span><span class="v"><strong data-i18n="p2t">El día de su cumpleaños</strong><span data-i18n="p2d">Acceso de cortesía para el titular y un acompañante.</span></span></li>
         <li><span class="k" data-i18n="p3k">2 años</span><span class="v"><strong data-i18n="p3t">De vigencia</strong><span data-i18n="p3d">Renovable durante el último mes de validez.</span></span></li>
       </ul>
@@ -183,7 +184,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
     <div class="main-inner">
       <header class="intro-form" id="form-head">
         <h2 data-i18n="formTitle">Solicitud de membresía</h2>
-        <p data-i18n="formLead">Complete sus datos. Nuestro Departamento de Ventas revisará la solicitud y le contactará para la entrega de su tarjeta.</p>
+        <p data-i18n="formLead">Complete sus datos. Nuestro Departamento de Ventas revisará la solicitud y le enviará su tarjeta digital por correo.</p>
       </header>
 
       <form id="signup" novalidate>
@@ -207,9 +208,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
             <span class="err" id="perfil-err"></span>
           </div>
           <div class="grid">
-            <div class="field full"><label for="empresa" data-i18n="org">Embajada, organismo o empresa</label><input id="empresa" name="Embajada / organismo / empresa" autocomplete="organization"><span class="err" id="empresa-err"></span></div>
-            <div class="field"><label for="cargo" data-i18n="role">Cargo</label><input id="cargo" name="Cargo" autocomplete="organization-title"><span class="err" id="cargo-err"></span></div>
-            <div class="field"><label for="pais-empresa" data-i18n="orgCountry">País</label><input id="pais-empresa" name="País de la entidad"></div>
+            <div class="field full"><label for="empresa"><span data-i18n="org">Embajada, organismo o empresa</span> <span class="opt-l" data-i18n="optional">(opcional)</span></label><input id="empresa" name="Embajada / organismo / empresa" autocomplete="organization"><span class="err" id="empresa-err"></span></div>
           </div>
         </fieldset>
 
@@ -218,8 +217,6 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
           <div class="grid">
             <div class="field"><label for="nombre" data-i18n="fname">Nombre</label><input id="nombre" name="Nombre" autocomplete="given-name" required><span class="err" id="nombre-err"></span></div>
             <div class="field"><label for="apellidos" data-i18n="lname">Apellidos</label><input id="apellidos" name="Apellidos" autocomplete="family-name" required><span class="err" id="apellidos-err"></span></div>
-            <div class="field"><label for="documento" data-i18n="doc">Pasaporte / documento de identidad</label><input id="documento" name="Documento de identidad" required><span class="err" id="documento-err"></span></div>
-            <div class="field"><label for="nacionalidad" data-i18n="nat">Nacionalidad</label><input id="nacionalidad" name="Nacionalidad" required><span class="err" id="nacionalidad-err"></span></div>
             <div class="field"><label for="nacimiento" data-i18n="dob">Fecha de nacimiento</label><input id="nacimiento" name="Fecha de nacimiento" type="date" autocomplete="bday" required><span class="err" id="nacimiento-err"></span></div>
             <div class="field"><label for="telefono" data-i18n="phone">Teléfono</label><input id="telefono" name="Teléfono" type="tel" autocomplete="tel" placeholder="+53" required><span class="err" id="telefono-err"></span></div>
             <div class="field full"><label for="email" data-i18n="email">Correo electrónico</label><input id="email" name="email" type="email" autocomplete="email" required><span class="err" id="email-err"></span></div>
@@ -227,21 +224,12 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
         </fieldset>
 
         <fieldset>
-          <legend><span class="n">III.</span><span class="t" data-i18n="s3">Dirección</span></legend>
-          <div class="grid">
-            <div class="field full"><label for="direccion" data-i18n="addr">Dirección particular</label><input id="direccion" name="Dirección" autocomplete="street-address" required><span class="err" id="direccion-err"></span></div>
-            <div class="field"><label for="ciudad" data-i18n="city">Ciudad</label><input id="ciudad" name="Ciudad" autocomplete="address-level2" value="La Habana" required><span class="err" id="ciudad-err"></span></div>
-            <div class="field"><label for="pais" data-i18n="country">País</label><input id="pais" name="País" autocomplete="country-name" value="Cuba" required><span class="err" id="pais-err"></span></div>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend><span class="n">IV.</span><span class="t" data-i18n="s4">Condiciones</span></legend>
+          <legend><span class="n">III.</span><span class="t" data-i18n="s4">Condiciones</span></legend>
           <div class="terms">
             <details>
               <summary data-i18n="dBenefits">Privilegios y exclusiones</summary>
               <ul data-i18n-list="benefitsList">
-                <li>10 % de descuento sobre el valor total de la consumición en los restaurantes, bares y cafeterías del Hotel Miramar Habana.</li>
+                <li>5 % de descuento sobre el valor total de la consumición en los restaurantes, bares y cafeterías del Hotel Miramar Habana.</li>
                 <li>El descuento no aplica en room service, banquetes, alquiler de salones, cenas de gala de Navidad y Fin de Año, minibar ni venta de tabaco.</li>
                 <li>Acceso de cortesía a la piscina para 2 personas el día del cumpleaños del titular.</li>
               </ul>
@@ -275,7 +263,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
 
         <div class="actions">
           <button class="submit" type="submit" id="enviar" data-i18n="submit">Enviar solicitud</button>
-          <p class="note" data-i18n="note">La firma de la solicitud se realiza al recoger su tarjeta en el hotel.</p>
+          <p class="note" data-i18n="note">Una vez aprobada, recibirá su tarjeta digital por correo electrónico.</p>
           <p class="status" id="status" role="status" aria-live="polite"></p>
         </div>
       </form>
@@ -283,7 +271,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
       <section class="done" id="done" hidden tabindex="-1">
         <p class="kicker" data-i18n="doneKicker">Solicitud recibida</p>
         <h2><span data-i18n="doneThanks">Gracias</span>, <span id="done-name"></span>.</h2>
-        <p data-i18n="doneText">Nuestro Departamento de Ventas revisará su solicitud y le contactará para coordinar la entrega de su tarjeta Club Gourmet Miramar.</p>
+        <p data-i18n="doneText">Nuestro Departamento de Ventas revisará su solicitud y le enviará por correo su tarjeta digital Club Gourmet Miramar.</p>
       </section>
 
       <footer class="foot">
@@ -306,19 +294,19 @@ const T = {
     p1t:"In restaurants and bars", p1d:"Off the total bill in the hotel's restaurants, bars and cafés.",
     p2k:"Pool", p2t:"On your birthday", p2d:"Complimentary access for the cardholder and one guest.",
     p3k:"2 years", p3t:"Validity", p3d:"Renewable during the last month of validity.",
-    formTitle:"Membership application", formLead:"Please complete your details. Our Sales Department will review your application and contact you to deliver your card.",
+    formTitle:"Membership application", formLead:"Please complete your details. Our Sales Department will review your application and email you your digital card.",
     s1:"Profile", profileQ:"You are applying as", pr1:"Diplomatic corps", pr2:"International organisation", pr3:"Foreign company", pr4:"Cuban company", pr5:"Private individual",
-    org:"Embassy, organisation or company", role:"Position", orgCountry:"Country",
+    org:"Embassy, organisation or company", optional:"(optional)", role:"Position", orgCountry:"Country",
     s2:"Personal details", fname:"First name", lname:"Last name", doc:"Passport / ID number", nat:"Nationality", dob:"Date of birth", phone:"Phone", email:"Email",
     s3:"Address", addr:"Home address", city:"City", country:"Country",
     s4:"Conditions", dBenefits:"Privileges and exclusions", dTerms:"Terms and conditions", dPrivacy:"Data protection",
-    benefitsList:["10% off the total bill in the restaurants, bars and cafés of Hotel Miramar Habana.","The discount does not apply to room service, banquets, venue hire, Christmas and New Year's Eve gala dinners, minibar or tobacco sales.","Complimentary pool access for 2 people on the cardholder's birthday."],
+    benefitsList:["5% off the total bill in the restaurants, bars and cafés of Hotel Miramar Habana.","The discount does not apply to room service, banquets, venue hire, Christmas and New Year's Eve gala dinners, minibar or tobacco sales.","Complimentary pool access for 2 people on the cardholder's birthday."],
     termsList:["The card is valid for two years and remains the property of Hotel Miramar Habana, which may cancel or modify it in case of misuse or lack of use by the cardholder.","It is personal and non-transferable. To enjoy the privileges, the cardholder must present it and sign the receipt for each purchase.","The discount applies to one card per table, even if two cardholders are present.","The cardholder does not need to pay the bill, provided they present their card.","The hotel may ask the card bearer for identification.","The programme does not offer credit: services are settled at the time. Hotel guests may charge them to their room if they meet the hotel's credit requirements.","During the last month of validity, the cardholder must renew their membership by updating their details.","Loss of the card must be reported immediately to the Sales Department for cancellation and replacement.","Any change of name, address or phone number must be notified to the hotel in writing.","The hotel may modify or cancel the programme, in whole or in part, with prior notice to the cardholder.","These terms are governed by current Cuban law."],
     privacy1:"Hotel Miramar Habana will process your data confidentially to manage your membership and privileges, improve your experience and comply with current legal obligations. With your consent, we will also send you information about the hotel's events and offers.",
     privacy2:"You may access, correct or cancel your data by writing to jefe.ventas.hmh@miramarhoteles.com with the reference \"Data protection\".",
     accept:"I wish to join Club Gourmet Miramar and accept its terms and conditions and the processing of my data.", news:"I would like to receive invitations to the hotel's events and exclusive offers.",
-    submit:"Submit application", note:"You will sign the application when you collect your card at the hotel.",
-    doneKicker:"Application received", doneThanks:"Thank you", doneText:"Our Sales Department will review your application and contact you to arrange the delivery of your Club Gourmet Miramar card.",
+    submit:"Submit application", note:"Once approved, you will receive your digital card by email.",
+    doneKicker:"Application received", doneThanks:"Thank you", doneText:"Our Sales Department will review your application and email you your Club Gourmet Miramar digital card.",
     footSales:"Sales: jefe.ventas.hmh@miramarhoteles.com",
     errRequired:"This field is required.", errEmail:"Please enter a valid email, e.g. name@company.com.", errPhone:"Please enter a phone number with at least 8 digits.", errAge:"You must be 18 or older to apply.", errDate:"Please check the date.", errProfile:"Please choose an option.", errTerms:"Please accept the terms to apply.", errCheck:"Please review the highlighted fields.", sending:"Sending…", errSend:"We could not send your application. Please check your connection and try again. If the problem persists, write to "
   },
