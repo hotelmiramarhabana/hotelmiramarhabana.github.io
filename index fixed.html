@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Club Gourmet Miramar</title>
+<meta name="description" content="Solicitud de membresía del Club Gourmet Miramar, programa de privilegios del Hotel Miramar Habana para el cuerpo diplomático y la comunidad empresarial.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+/* Layout: dos columnas en escritorio. Izquierda fija: logo, invitación, tarjeta y privilegios. Derecha: la solicitud por secciones. En móvil, todo en una columna. */
+:root{
+  --ink:#F2F4F6; --ink-2:#C9D0D7; --blue:#3FA2E6; --orange:#EF892B;
+  --bg:#000000; --panel:#0A0B0D; --surface:#111317; --fg:#E9ECEF; --muted:#8C949D; --line:#2A2E34; --line-soft:#16191D;
+  --focus:#3FA2E6; --error:#F08A80;
+  --display:"Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --body:"Manrope", "Segoe UI", Arial, sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:300 16px/1.65 var(--body)}
+strong,b{font-weight:600}
+
+.page{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);min-height:100vh}
+
+/* Columna de presentación */
+.intro{background:var(--panel);border-right:1px solid var(--line-soft)}
+.intro-inner{position:sticky;top:0;padding-block:48px;padding-left:max(48px, env(safe-area-inset-left, 0px));padding-right:48px;display:grid;gap:34px;max-width:520px;margin-left:auto}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.logo{width:150px;height:auto;display:block}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font:500 11.5px/1 var(--body);letter-spacing:.12em}
+.lang button{background:none;border:0;color:var(--muted);padding:8px 12px;cursor:pointer;font:inherit;letter-spacing:inherit}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.lang button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+
+.kicker{font:500 11.5px/1.4 var(--body);letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin:0 0 14px;display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:28px;height:1px;background:var(--orange)}
+h1{font:400 clamp(40px,4.6vw,58px)/1 var(--display);margin:0 0 18px;color:var(--ink);letter-spacing:-.01em;text-wrap:balance}
+h1 em{font-style:italic;color:var(--blue)}
+.lead{margin:0;color:var(--muted);max-width:40ch;font-size:16.5px}
+
+.card{width:min(100%,330px);aspect-ratio:1.586;border-radius:16px;padding:22px 24px;display:flex;flex-direction:column;justify-content:space-between;color:#EEF3F8;
+  background:radial-gradient(120% 90% at 100% 0%,#1C3D5C 0%,#0B1622 62%);box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 30px 60px -20px rgba(14,123,194,.35);position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;inset:auto 0 0 0;height:3px;background:linear-gradient(90deg,var(--blue) 0 80%,var(--orange) 80%)}
+.card .c-top{display:flex;justify-content:space-between;align-items:flex-start}
+.card .c-name{font:400 22px/1.05 var(--display);letter-spacing:.01em}
+.card .c-name small{display:block;font:500 8.5px/1.6 var(--body);letter-spacing:.3em;text-transform:uppercase;color:#8FB6D6;margin-top:6px}
+.card .chip{width:34px;height:26px;border-radius:5px;background:linear-gradient(135deg,#D9C39A,#A88A57);opacity:.85}
+.card .c-num{font:400 15px/1 var(--body);letter-spacing:.32em;font-variant-numeric:tabular-nums;color:#D7E2EC}
+.card .c-foot{display:flex;justify-content:space-between;font:500 8.5px/1.4 var(--body);letter-spacing:.2em;text-transform:uppercase;color:#7E97AD}
+
+.perks{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.perks li{display:grid;grid-template-columns:104px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.perks .k{font:400 28px/1 var(--display);color:var(--ink);white-space:nowrap}
+.perks .v{font-size:14.5px;color:var(--muted)}
+.perks .v strong{color:var(--fg);display:block;font-size:14.5px}
+
+/* Columna del formulario */
+.main{padding-block:48px 32px;padding-left:56px;padding-right:max(32px, env(safe-area-inset-right, 0px))}
+.main-inner{max-width:620px}
+.intro-form{margin:0 0 36px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.intro-form h2{font:400 30px/1.15 var(--display);margin:0 0 8px;color:var(--ink)}
+.intro-form p{margin:0;color:var(--muted);font-size:15px}
+
+form{display:grid;gap:44px}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:20px}
+legend{padding:0;margin-bottom:14px;display:flex;align-items:baseline;gap:14px;width:100%}
+legend .n{font:400 15px/1 var(--display);font-style:italic;color:var(--blue)}
+legend .t{font:500 12px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;color:var(--ink)}
+legend .opt{margin-left:auto;font:400 12.5px/1 var(--body);color:var(--muted);letter-spacing:0;text-transform:none}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 24px}
+.full{grid-column:1/-1}
+.field{display:grid;gap:4px;min-width:0}
+label,.label{font:500 11.5px/1.4 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+input,select{width:100%;font:400 16px/1.4 var(--body);color:var(--fg);background:transparent;border:0;border-bottom:1px solid var(--line);border-radius:0;padding:10px 0 9px;min-height:44px;transition:border-color .2s}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 10px) 52%,calc(100% - 5px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:24px}
+select option{color:#E9ECEF;background:#111317}
+input::placeholder{color:#5E666F}
+input:hover,select:hover{border-bottom-color:var(--ink-2)}
+input:focus,select:focus{outline:none;border-bottom:1.5px solid var(--focus);padding-bottom:8.5px}
+input:focus-visible,select:focus-visible{box-shadow:0 2px 0 0 var(--focus)}
+.field.invalid input,.field.invalid select{border-bottom-color:var(--error)}
+.err{font-size:12.5px;color:var(--error)}
+.err:empty{display:none}
+.hint{font-size:12.5px;color:var(--muted)}
+.opt-l{text-transform:none;letter-spacing:0;font-weight:400}
+
+.segment{display:flex;flex-wrap:wrap;gap:10px}
+.segment label{text-transform:none;letter-spacing:0;font:400 14.5px/1 var(--body);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:11px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .2s,background .2s}
+.segment input{position:absolute;opacity:0;width:1px;height:1px;min-height:0}
+.segment label:has(input:checked){border-color:var(--ink);background:var(--ink);color:var(--bg)}
+.segment label:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:2px}
+.field.invalid .segment label{border-color:var(--error)}
+
+.terms{display:grid;gap:0;border-top:1px solid var(--line)}
+details{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:15px 0;font:500 14.5px/1.3 var(--body);color:var(--ink)}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:300 20px/1 var(--body);color:var(--muted);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+summary:focus-visible{outline:2px solid var(--focus);outline-offset:4px}
+details ul{margin:0 0 18px;padding-left:18px;display:grid;gap:8px;font-size:14px;color:var(--muted)}
+details p{font-size:14px;color:var(--muted);margin:0 0 14px}
+
+.check{display:grid;grid-template-columns:20px 1fr;gap:14px;align-items:start;font:400 14.5px/1.55 var(--body);text-transform:none;letter-spacing:0;color:var(--fg);cursor:pointer}
+.check input{width:18px;height:18px;min-height:0;margin:3px 0 0;padding:0;accent-color:var(--ink);border:0}
+.check.invalid span{color:var(--error)}
+
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;padding-top:8px}
+.submit{font:500 13px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;background:var(--ink);color:var(--bg);border:0;border-radius:0;padding:19px 34px;cursor:pointer;min-height:54px;transition:background .2s}
+.submit:hover{background:var(--blue)}
+.submit:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.submit[disabled]{opacity:.6;cursor:wait}
+.note{font-size:13px;color:var(--muted);margin:0;max-width:34ch}
+.status{font-size:14px;margin:0;flex-basis:100%}
+.status.error{color:var(--error)}
+
+.done{display:grid;gap:16px;padding-block:24px}
+.done h2{font:400 40px/1.05 var(--display);margin:0;color:var(--ink)}
+.done p{margin:0;color:var(--muted);max-width:52ch}
+.done:focus{outline:none}
+
+.foot{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px 22px;font-size:13px;color:var(--muted)}
+.foot b{color:var(--fg);font-weight:500}
+
+@media (max-width:900px){
+  .page{grid-template-columns:1fr}
+  .intro{border-right:0;border-bottom:1px solid var(--line-soft)}
+  .intro-inner{position:static;max-width:none;margin:0;padding-block:28px 36px;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px));gap:28px}
+  .main{padding-block:36px 24px;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+  .logo{width:124px}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr}
+  .perks li{grid-template-columns:92px 1fr;gap:12px}
+  .perks .k{font-size:24px}
+  .submit{width:100%}
+  .note{max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <aside class="intro">
+    <div class="intro-inner">
+      <div class="top">
+        <img class="logo" src="data:image/png;base64,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" alt="Hotel Miramar Habana" width="437" height="161">
+        <div class="lang" role="group" aria-label="Idioma / Language">
+          <button type="button" data-lang="es" aria-pressed="true">ES</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+
+      <div>
+        <p class="kicker" data-i18n="kicker">Programa de privilegios</p>
+        <h1>Club Gourmet <em>Miramar</em></h1>
+        <p class="lead" data-i18n="lead">Una membresía pensada para el cuerpo diplomático y la comunidad empresarial que hace de La Habana su ciudad. Ventajas en nuestra mesa, todo el año.</p>
+      </div>
+
+      <div class="card" aria-hidden="true">
+        <div class="c-top">
+          <div class="c-name">Club Gourmet<br>Miramar<small>Hotel Miramar Habana</small></div>
+          <div class="chip"></div>
+        </div>
+        <div class="c-num">N.º 0001</div>
+        <div class="c-foot"><span data-i18n="cardPersonal">Personal e intransferible</span><span data-i18n="cardValid">Vigencia 2 años</span></div>
+      </div>
+
+      <ul class="perks">
+        <li><span class="k">5 %</span><span class="v"><strong data-i18n="p1t">En restaurantes y bares</strong><span data-i18n="p1d">Sobre el total de la consumición en restaurantes, bares y cafeterías del hotel.</span></span></li>
+        <li><span class="k" data-i18n="p2k">Piscina</span><span class="v"><strong data-i18n="p2t">El día de su cumpleaños</strong><span data-i18n="p2d">Acceso de cortesía para el titular y un acompañante.</span></span></li>
+        <li><span class="k" data-i18n="p3k">2 años</span><span class="v"><strong data-i18n="p3t">De vigencia</strong><span data-i18n="p3d">Renovable durante el último mes de validez.</span></span></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="main-inner">
+      <header class="intro-form" id="form-head">
+        <h2 data-i18n="formTitle">Solicitud de membresía</h2>
+        <p data-i18n="formLead">Complete sus datos. Nuestro Departamento de Ventas revisará la solicitud y le enviará su tarjeta digital por correo.</p>
+      </header>
+
+      <form id="signup" novalidate>
+        <input type="hidden" name="_subject" value="Nueva solicitud · Club Gourmet Miramar">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="Idioma" id="idioma" value="Español">
+
+        <fieldset>
+          <legend><span class="n">I.</span><span class="t" data-i18n="s1">Perfil</span></legend>
+          <div class="field full" id="perfil">
+            <span class="label" id="perfil-label" data-i18n="profileQ">Usted solicita como</span>
+            <div class="segment" role="radiogroup" aria-labelledby="perfil-label">
+              <label><input type="radio" name="Perfil" value="Cuerpo diplomático" required><span data-i18n="pr1">Cuerpo diplomático</span></label>
+              <label><input type="radio" name="Perfil" value="Organismo internacional"><span data-i18n="pr2">Organismo internacional</span></label>
+              <label><input type="radio" name="Perfil" value="Empresa extranjera"><span data-i18n="pr3">Empresa extranjera</span></label>
+              <label><input type="radio" name="Perfil" value="Empresa cubana"><span data-i18n="pr4">Empresa cubana</span></label>
+              <label><input type="radio" name="Perfil" value="Particular"><span data-i18n="pr5">Particular</span></label>
+            </div>
+            <span class="err" id="perfil-err"></span>
+          </div>
+          <div class="grid">
+            <div class="field full"><label for="empresa"><span data-i18n="org">Embajada, organismo o empresa</span> <span class="opt-l" data-i18n="optional">(opcional)</span></label><input id="empresa" name="Embajada / organismo / empresa" autocomplete="organization"><span class="err" id="empresa-err"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="n">II.</span><span class="t" data-i18n="s2">Datos personales</span></legend>
+          <div class="grid">
+            <div class="field"><label for="nombre" data-i18n="fname">Nombre</label><input id="nombre" name="Nombre" autocomplete="given-name" required><span class="err" id="nombre-err"></span></div>
+            <div class="field"><label for="apellidos" data-i18n="lname">Apellidos</label><input id="apellidos" name="Apellidos" autocomplete="family-name" required><span class="err" id="apellidos-err"></span></div>
+            <div class="field"><label for="nacimiento" data-i18n="dob">Fecha de nacimiento</label><input id="nacimiento" name="Fecha de nacimiento" type="date" autocomplete="bday" required><span class="err" id="nacimiento-err"></span></div>
+            <div class="field"><label for="telefono" data-i18n="phone">Teléfono</label><input id="telefono" name="Teléfono" type="tel" autocomplete="tel" placeholder="+53" required><span class="err" id="telefono-err"></span></div>
+            <div class="field full"><label for="email" data-i18n="email">Correo electrónico</label><input id="email" name="email" type="email" autocomplete="email" required><span class="err" id="email-err"></span></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span class="n">III.</span><span class="t" data-i18n="s4">Condiciones</span></legend>
+          <div class="terms">
+            <details>
+              <summary data-i18n="dBenefits">Privilegios y exclusiones</summary>
+              <ul data-i18n-list="benefitsList">
+                <li>5 % de descuento sobre el valor total de la consumición en los restaurantes, bares y cafeterías del Hotel Miramar Habana.</li>
+                <li>El descuento no aplica en room service, banquetes, alquiler de salones, cenas de gala de Navidad y Fin de Año, minibar ni venta de tabaco.</li>
+                <li>Acceso de cortesía a la piscina para 2 personas el día del cumpleaños del titular.</li>
+              </ul>
+            </details>
+            <details>
+              <summary data-i18n="dTerms">Términos y condiciones</summary>
+              <ul data-i18n-list="termsList">
+                <li>La tarjeta tiene una vigencia de dos años y es propiedad del Hotel Miramar Habana, que puede cancelarla o modificarla ante un uso inadecuado o la falta de uso del titular.</li>
+                <li>Es personal e intransferible. Para disfrutar de los privilegios, el titular debe presentarla y firmar el comprobante de su consumo.</li>
+                <li>El descuento se aplica sobre una sola tarjeta por mesa, aunque en ella haya dos titulares.</li>
+                <li>El titular no tiene que ser quien pague la cuenta, siempre que presente su tarjeta.</li>
+                <li>El hotel puede solicitar un documento de identidad al portador de la tarjeta.</li>
+                <li>El programa no ofrece crédito: los servicios se liquidan en el momento. Los huéspedes pueden cargarlos a su habitación si cumplen los requisitos de crédito del hotel.</li>
+                <li>En el último mes de vigencia, el titular debe renovar su inscripción actualizando sus datos.</li>
+                <li>La pérdida de la tarjeta debe comunicarse de inmediato al Departamento de Ventas para su anulación y reposición.</li>
+                <li>Cualquier cambio de nombre, dirección o teléfono debe comunicarse por escrito al hotel.</li>
+                <li>El hotel puede modificar o cancelar el programa, total o parcialmente, con aviso previo al titular.</li>
+                <li>Estos términos se rigen por la legislación cubana vigente.</li>
+              </ul>
+            </details>
+            <details>
+              <summary data-i18n="dPrivacy">Protección de datos</summary>
+              <p data-i18n="privacy1">El Hotel Miramar Habana tratará sus datos de forma confidencial para gestionar su membresía y sus privilegios, mejorar su experiencia y cumplir las obligaciones legales vigentes. Con su autorización, le enviaremos también información sobre eventos y propuestas del hotel.</p>
+              <p data-i18n="privacy2">Puede consultar, rectificar o cancelar sus datos escribiendo a jefe.ventas.hmh@miramarhoteles.com con la referencia «Protección de datos».</p>
+            </details>
+          </div>
+          <label class="check" id="terminos-wrap"><input type="checkbox" id="terminos" name="Acepta términos" value="Sí" required><span data-i18n="accept">Deseo formar parte del Club Gourmet Miramar y acepto sus términos y condiciones y el tratamiento de mis datos.</span></label>
+          <span class="err" id="terminos-err"></span>
+          <label class="check"><input type="checkbox" id="comunicaciones" name="Acepta comunicaciones" value="Sí"><span data-i18n="news">Deseo recibir invitaciones a eventos y propuestas exclusivas del hotel.</span></label>
+        </fieldset>
+
+        <div class="actions">
+          <button class="submit" type="submit" id="enviar" data-i18n="submit">Enviar solicitud</button>
+          <p class="note" data-i18n="note">Una vez aprobada, recibirá su tarjeta digital por correo electrónico.</p>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <section class="done" id="done" hidden tabindex="-1">
+        <p class="kicker" data-i18n="doneKicker">Solicitud recibida</p>
+        <h2><span data-i18n="doneThanks">Gracias</span>, <span id="done-name"></span>.</h2>
+        <p data-i18n="doneText">Nuestro Departamento de Ventas revisará su solicitud y le enviará por correo su tarjeta digital Club Gourmet Miramar.</p>
+      </section>
+
+      <footer class="foot">
+        <span><b>Hotel Miramar Habana</b></span>
+        <span data-i18n="footSales">Ventas: jefe.ventas.hmh@miramarhoteles.com</span>
+        <span>Tel. +53 7 204 8500</span>
+      </footer>
+    </div>
+  </main>
+</div>
+
+<script>
+// Correo que recibe las solicitudes (servicio gratuito FormSubmit)
+const DESTINO = "ventas.hmh@miramarhoteles.com";
+
+const T = {
+  en: {
+    kicker:"Privilege programme", lead:"A membership designed for the diplomatic corps and the business community who make Havana their city. Privileges at our table, all year round.",
+    cardPersonal:"Personal and non-transferable", cardValid:"Valid 2 years",
+    p1t:"In restaurants and bars", p1d:"Off the total bill in the hotel's restaurants, bars and cafés.",
+    p2k:"Pool", p2t:"On your birthday", p2d:"Complimentary access for the cardholder and one guest.",
+    p3k:"2 years", p3t:"Validity", p3d:"Renewable during the last month of validity.",
+    formTitle:"Membership application", formLead:"Please complete your details. Our Sales Department will review your application and email you your digital card.",
+    s1:"Profile", profileQ:"You are applying as", pr1:"Diplomatic corps", pr2:"International organisation", pr3:"Foreign company", pr4:"Cuban company", pr5:"Private individual",
+    org:"Embassy, organisation or company", optional:"(optional)", role:"Position", orgCountry:"Country",
+    s2:"Personal details", fname:"First name", lname:"Last name", doc:"Passport / ID number", nat:"Nationality", dob:"Date of birth", phone:"Phone", email:"Email",
+    s3:"Address", addr:"Home address", city:"City", country:"Country",
+    s4:"Conditions", dBenefits:"Privileges and exclusions", dTerms:"Terms and conditions", dPrivacy:"Data protection",
+    benefitsList:["5% off the total bill in the restaurants, bars and cafés of Hotel Miramar Habana.","The discount does not apply to room service, banquets, venue hire, Christmas and New Year's Eve gala dinners, minibar or tobacco sales.","Complimentary pool access for 2 people on the cardholder's birthday."],
+    termsList:["The card is valid for two years and remains the property of Hotel Miramar Habana, which may cancel or modify it in case of misuse or lack of use by the cardholder.","It is personal and non-transferable. To enjoy the privileges, the cardholder must present it and sign the receipt for each purchase.","The discount applies to one card per table, even if two cardholders are present.","The cardholder does not need to pay the bill, provided they present their card.","The hotel may ask the card bearer for identification.","The programme does not offer credit: services are settled at the time. Hotel guests may charge them to their room if they meet the hotel's credit requirements.","During the last month of validity, the cardholder must renew their membership by updating their details.","Loss of the card must be reported immediately to the Sales Department for cancellation and replacement.","Any change of name, address or phone number must be notified to the hotel in writing.","The hotel may modify or cancel the programme, in whole or in part, with prior notice to the cardholder.","These terms are governed by current Cuban law."],
+    privacy1:"Hotel Miramar Habana will process your data confidentially to manage your membership and privileges, improve your experience and comply with current legal obligations. With your consent, we will also send you information about the hotel's events and offers.",
+    privacy2:"You may access, correct or cancel your data by writing to jefe.ventas.hmh@miramarhoteles.com with the reference \"Data protection\".",
+    accept:"I wish to join Club Gourmet Miramar and accept its terms and conditions and the processing of my data.", news:"I would like to receive invitations to the hotel's events and exclusive offers.",
+    submit:"Submit application", note:"Once approved, you will receive your digital card by email.",
+    doneKicker:"Application received", doneThanks:"Thank you", doneText:"Our Sales Department will review your application and email you your Club Gourmet Miramar digital card.",
+    footSales:"Sales: jefe.ventas.hmh@miramarhoteles.com",
+    errRequired:"This field is required.", errEmail:"Please enter a valid email, e.g. name@company.com.", errPhone:"Please enter a phone number with at least 8 digits.", errAge:"You must be 18 or older to apply.", errDate:"Please check the date.", errProfile:"Please choose an option.", errTerms:"Please accept the terms to apply.", errCheck:"Please review the highlighted fields.", sending:"Sending…", errSend:"We could not send your application. Please check your connection and try again. If the problem persists, write to "
+  },
+  es: {
+    errRequired:"Este campo es obligatorio.", errEmail:"Escriba un correo válido, por ejemplo nombre@empresa.com.", errPhone:"Escriba un teléfono de al menos 8 dígitos.", errAge:"Debe ser mayor de 18 años para solicitar la membresía.", errDate:"Revise la fecha.", errProfile:"Seleccione una opción.", errTerms:"Debe aceptar los términos para enviar la solicitud.", errCheck:"Revise los campos marcados.", sending:"Enviando…", errSend:"No pudimos enviar su solicitud. Revise su conexión e inténtelo de nuevo. Si el problema persiste, escriba a "
+  }
+};
+// Guarda el texto original en español
+document.querySelectorAll("[data-i18n]").forEach(el => { T.es[el.dataset.i18n] = el.textContent; });
+document.querySelectorAll("[data-i18n-list]").forEach(el => { T.es[el.dataset.i18nList] = [...el.children].map(li => li.textContent); });
+
+let lang = "es";
+const t = k => T[lang][k] ?? T.es[k];
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.getElementById("idioma").value = l === "en" ? "Inglés" : "Español";
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-list]").forEach(el => { t(el.dataset.i18nList).forEach((txt, i) => { if (el.children[i]) el.children[i].textContent = txt; }); });
+  form.querySelectorAll("[aria-invalid='true']").forEach(i => showError(i, fieldError(i)));
+}
+document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
+
+const form = document.getElementById("signup");
+const btn = document.getElementById("enviar");
+const statusEl = document.getElementById("status");
+
+function fieldError(input){
+  if (input.type === "radio") return form.querySelector("input[name='Perfil']:checked") ? "" : t("errProfile");
+  if (input.type === "checkbox") return input.checked ? "" : t("errTerms");
+  if (input.validity.valueMissing) return t("errRequired");
+  if (input.type === "email" && input.validity.typeMismatch) return t("errEmail");
+  if (input.id === "telefono" && input.value.replace(/\D/g, "").length < 8) return t("errPhone");
+  if (input.id === "nacimiento" && input.value){
+    const d = new Date(input.value), now = new Date();
+    if (d.getFullYear() < 1900) return t("errDate");
+    const adult = new Date(d.getFullYear() + 18, d.getMonth(), d.getDate());
+    if (adult > now) return t("errAge");
+  }
+  return "";
+}
+function showError(input, text){
+  const id = input.type === "radio" ? "perfil" : input.id;
+  const err = document.getElementById(id + "-err");
+  const wrap = input.type === "checkbox" ? input.closest(".check") : input.closest(".field");
+  if (err) err.textContent = text;
+  if (wrap) wrap.classList.toggle("invalid", !!text);
+  input.setAttribute("aria-invalid", text ? "true" : "false");
+  if (err) input.setAttribute("aria-describedby", err.id);
+}
+
+const required = () => [...form.querySelectorAll("[required]")];
+required().forEach(i => {
+  i.addEventListener("blur", () => { if (i.value && i.type !== "radio" && i.type !== "checkbox") showError(i, fieldError(i)); });
+  i.addEventListener("input", () => { if (i.getAttribute("aria-invalid") === "true") showError(i, fieldError(i)); });
+});
+form.querySelectorAll("input[name='Perfil']").forEach(r => r.addEventListener("change", () => showError(form.querySelector("input[name='Perfil']"), "")));
+document.getElementById("terminos").addEventListener("change", e => showError(e.target, fieldError(e.target)));
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  let first = null;
+  required().forEach(i => { const m = fieldError(i); showError(i, m); if (m && !first) first = i; });
+  if (first){ first.focus(); statusEl.className = "status error"; statusEl.textContent = t("errCheck"); return; }
+
+  btn.disabled = true; btn.textContent = t("sending");
+  statusEl.className = "status"; statusEl.textContent = "";
+
+  const data = new FormData(form);
+  data.set("_replyto", data.get("email"));
+  data.set("Fecha de solicitud", new Date().toLocaleString("es-CU"));
+  if (!data.has("Acepta comunicaciones")) data.set("Acepta comunicaciones", "No");
+
+  try{
+    const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), 20000);
+    const res = await fetch("https://formsubmit.co/ajax/" + DESTINO, { method:"POST", headers:{ "Accept":"application/json" }, body:data, signal:ctrl.signal });
+    clearTimeout(timer);
+    const json = await res.json().catch(() => ({}));
+    const msg = String(json.message || "");
+    // Primera vez: FormSubmit pide activar el formulario desde el correo de Ventas
+    if (/activat/i.test(msg)){
+      statusEl.className = "status error";
+      statusEl.textContent = lang === "en"
+        ? "This form is pending activation. The hotel has been notified; please try again later or write to " + DESTINO + "."
+        : "El formulario está pendiente de activación. Ya avisamos al hotel; inténtelo más tarde o escriba a " + DESTINO + ".";
+      console.warn("FormSubmit:", msg);
+      btn.disabled = false; btn.textContent = t("submit");
+      return;
+    }
+    if (!res.ok || String(json.success) === "false") throw new Error(msg || ("HTTP " + res.status));
+    form.hidden = true; document.getElementById("form-head").hidden = true;
+    document.getElementById("done-name").textContent = data.get("Nombre") + " " + data.get("Apellidos");
+    const done = document.getElementById("done"); done.hidden = false; done.focus();
+    done.scrollIntoView({ behavior:"smooth", block:"start" });
+  }catch(err){
+    console.warn("Envío rápido fallido, se usa el envío normal:", err && err.message);
+    nativeSubmit(data);
+  }
+});
+
+// Plan B: envío normal del formulario a FormSubmit; al terminar vuelve a esta página con ?enviado=1
+function nativeSubmit(data){
+  try{ sessionStorage.setItem("cgm_name", (data.get("Nombre")||"") + " " + (data.get("Apellidos")||"")); }catch(e){}
+  const add = (n, v) => { let i = form.querySelector('input[type=hidden][name="'+n+'"]'); if(!i){ i = document.createElement("input"); i.type="hidden"; i.name=n; form.appendChild(i); } i.value = v; };
+  add("_replyto", data.get("email") || "");
+  add("Fecha de solicitud", data.get("Fecha de solicitud") || "");
+  if (!form.querySelector("#comunicaciones").checked) add("Acepta comunicaciones", "No");
+  add("_next", location.origin + location.pathname + "?enviado=1" + (lang === "en" ? "&lang=en" : ""));
+  form.action = "https://formsubmit.co/" + DESTINO;
+  form.method = "POST";
+  statusEl.className = "status"; statusEl.textContent = t("sending");
+  HTMLFormElement.prototype.submit.call(form);
+}
+
+// Al volver del envío normal, mostrar la confirmación
+(function(){
+  const q = new URLSearchParams(location.search);
+  if (q.get("lang") === "en") setLang("en");
+  if (q.get("enviado") !== "1") return;
+  let name = ""; try{ name = sessionStorage.getItem("cgm_name") || ""; sessionStorage.removeItem("cgm_name"); }catch(e){}
+  form.hidden = true; document.getElementById("form-head").hidden = true;
+  if (name.trim()) document.getElementById("done-name").textContent = name.trim();
+  else document.querySelector("#done h2").textContent = (lang === "en" ? "Thank you for your application." : "Gracias por su solicitud.");
+  document.getElementById("done").hidden = false;
+  history.replaceState(null, "", location.pathname);
+})();
+</script>
+</body>
+</html>
