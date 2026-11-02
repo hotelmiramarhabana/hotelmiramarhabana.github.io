@@ -203,6 +203,7 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
               <label><input type="radio" name="Perfil" value="Organismo internacional"><span data-i18n="pr2">Organismo internacional</span></label>
               <label><input type="radio" name="Perfil" value="Empresa extranjera"><span data-i18n="pr3">Empresa extranjera</span></label>
               <label><input type="radio" name="Perfil" value="Empresa cubana"><span data-i18n="pr4">Empresa cubana</span></label>
+              <label><input type="radio" name="Perfil" value="Miembro del Club Meliá"><span data-i18n="pr6">Miembro del Club Meliá</span></label>
               <label><input type="radio" name="Perfil" value="Particular"><span data-i18n="pr5">Particular</span></label>
             </div>
             <span class="err" id="perfil-err"></span>
@@ -217,9 +218,10 @@ details p{font-size:14px;color:var(--muted);margin:0 0 14px}
           <div class="grid">
             <div class="field"><label for="nombre" data-i18n="fname">Nombre</label><input id="nombre" name="Nombre" autocomplete="given-name" required><span class="err" id="nombre-err"></span></div>
             <div class="field"><label for="apellidos" data-i18n="lname">Apellidos</label><input id="apellidos" name="Apellidos" autocomplete="family-name" required><span class="err" id="apellidos-err"></span></div>
+            <div class="field"><label for="nacionalidad" data-i18n="nat">Nacionalidad</label><input id="nacionalidad" name="Nacionalidad" autocomplete="country-name" required><span class="err" id="nacionalidad-err"></span></div>
             <div class="field"><label for="nacimiento" data-i18n="dob">Fecha de nacimiento</label><input id="nacimiento" name="Fecha de nacimiento" type="date" autocomplete="bday" required><span class="err" id="nacimiento-err"></span></div>
             <div class="field"><label for="telefono" data-i18n="phone">Teléfono</label><input id="telefono" name="Teléfono" type="tel" autocomplete="tel" placeholder="+53" required><span class="err" id="telefono-err"></span></div>
-            <div class="field full"><label for="email" data-i18n="email">Correo electrónico</label><input id="email" name="email" type="email" autocomplete="email" required><span class="err" id="email-err"></span></div>
+            <div class="field"><label for="email" data-i18n="email">Correo electrónico</label><input id="email" name="email" type="email" autocomplete="email" required><span class="err" id="email-err"></span></div>
           </div>
         </fieldset>
 
@@ -295,7 +297,7 @@ const T = {
     p2k:"Pool", p2t:"On your birthday", p2d:"Complimentary access for the cardholder and one guest.",
     p3k:"2 years", p3t:"Validity", p3d:"Renewable during the last month of validity.",
     formTitle:"Membership application", formLead:"Please complete your details. Our Sales Department will review your application and email you your digital card.",
-    s1:"Profile", profileQ:"You are applying as", pr1:"Diplomatic corps", pr2:"International organisation", pr3:"Foreign company", pr4:"Cuban company", pr5:"Private individual",
+    s1:"Profile", profileQ:"You are applying as", pr1:"Diplomatic corps", pr2:"International organisation", pr3:"Foreign company", pr4:"Cuban company", pr5:"Private individual", pr6:"Club Meliá member",
     org:"Embassy, organisation or company", optional:"(optional)", role:"Position", orgCountry:"Country",
     s2:"Personal details", fname:"First name", lname:"Last name", doc:"Passport / ID number", nat:"Nationality", dob:"Date of birth", phone:"Phone", email:"Email",
     s3:"Address", addr:"Home address", city:"City", country:"Country",
@@ -381,31 +383,34 @@ form.addEventListener("submit", async (e) => {
   data.set("Fecha de solicitud", new Date().toLocaleString("es-CU"));
   if (!data.has("Acepta comunicaciones")) data.set("Acepta comunicaciones", "No");
 
-  try{
-    const res = await fetch("https://formsubmit.co/ajax/" + DESTINO, { method:"POST", headers:{ "Accept":"application/json" }, body:data });
-    const json = await res.json().catch(() => ({}));
-    const msg = String(json.message || "");
-    // Primera vez: FormSubmit pide activar el formulario desde el correo de Ventas
-    if (/activat/i.test(msg)){
-      statusEl.className = "status error";
-      statusEl.textContent = lang === "en"
-        ? "This form is pending activation. The hotel has been notified; please try again later or write to " + DESTINO + "."
-        : "El formulario está pendiente de activación. Ya avisamos al hotel; inténtelo más tarde o escriba a " + DESTINO + ".";
-      console.warn("FormSubmit:", msg);
-      btn.disabled = false; btn.textContent = t("submit");
-      return;
-    }
-    if (!res.ok || String(json.success) === "false") throw new Error(msg || ("HTTP " + res.status));
-    form.hidden = true; document.getElementById("form-head").hidden = true;
-    document.getElementById("done-name").textContent = data.get("Nombre") + " " + data.get("Apellidos");
-    const done = document.getElementById("done"); done.hidden = false; done.focus();
-    done.scrollIntoView({ behavior:"smooth", block:"start" });
-  }catch(err){
-    console.warn("Envío fallido:", err && err.message);
+  const fail = (es, en, why) => {
+    console.warn("Envío fallido [" + why + "]");
     statusEl.className = "status error";
-    statusEl.textContent = t("errSend") + DESTINO + ".";
+    statusEl.textContent = lang === "en" ? en : es;
     btn.disabled = false; btn.textContent = t("submit");
+  };
+  const contacto = " " + DESTINO + ".";
+  let res, json = null;
+  try{
+    res = await fetch("https://formsubmit.co/ajax/" + DESTINO, { method:"POST", headers:{ "Accept":"application/json" }, body:data });
+  }catch(err){
+    return fail("No hay conexión con el servicio de envío. Revise su internet o desactive el bloqueador de anuncios e inténtelo de nuevo. Si persiste, escriba a" + contacto,
+                "Could not reach the sending service. Check your connection or disable your ad blocker and try again. If it persists, write to" + contacto, "red/bloqueo: " + (err && err.message));
   }
+  try{ json = await res.json(); }catch(_){}
+  const msg = String((json && json.message) || "");
+  if (/activat|confirm/i.test(msg)){
+    return fail("El formulario está pendiente de activación. Ya avisamos al hotel; inténtelo más tarde o escriba a" + contacto,
+                "This form is pending activation. The hotel has been notified; please try again later or write to" + contacto, "activación: " + msg);
+  }
+  if (!res.ok || !json || String(json.success) !== "true"){
+    return fail("El servicio rechazó el envío (" + res.status + "). Inténtelo de nuevo en unos minutos o escriba a" + contacto,
+                "The service rejected the submission (" + res.status + "). Please try again in a few minutes or write to" + contacto, "HTTP " + res.status + (msg ? ": " + msg : " sin confirmación"));
+  }
+  form.hidden = true; document.getElementById("form-head").hidden = true;
+  document.getElementById("done-name").textContent = data.get("Nombre") + " " + data.get("Apellidos");
+  const done = document.getElementById("done"); done.hidden = false; done.focus();
+  done.scrollIntoView({ behavior:"smooth", block:"start" });
 });
 </script>
 </body>
